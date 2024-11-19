@@ -49,7 +49,7 @@ const MoviewPreviewCard = forwardRef<HTMLDivElement, { movie: MovieData }>(
         <button
           title={isFavourite ? "Remove from favourites" : "Add to favourites"}
           onClick={handleToggleFavourite}
-          className={`absolute top-3 right-3 focus-visible:outline-none group-hover/preview:block animate-fadeInZoomFast ${
+          className={`absolute top-3 right-3 focus-visible:outline-none group-hover/preview:block animate-fadeInZoomFast rounded-full p-2 bg-white ${
             isMobile ? "block" : "hidden"
           }`}
         >

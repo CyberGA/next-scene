@@ -38,6 +38,12 @@ bun dev
 
 Live demo link: [https://next-scene.vercel.app/](https://next-scene.vercel.app/)
 
+### How it works
+- Hover on the movie poster to want to  see the trailer
+- The action button will appear, 
+    - the button on the top left corner is to view details, 
+    - while that on the top right is to add to favourite.
+
 #### Design Decisions
 SSR is used to improve SEO and initial load performance. This is particularly important for a movie application where users might search for specific movies. SSR ensures that the content is available to search engines and users immediately.
 
