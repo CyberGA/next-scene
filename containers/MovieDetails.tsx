@@ -185,7 +185,7 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
           </div>
           <div className="mt-3">
             <h2 className="text-xl sm:text-3xl font-bold">Genres</h2>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {details?.genres.map((genre) => (
                 <span
                   key={genre.id}
