@@ -3,16 +3,23 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { TMDB_Endpoints } from "@/services/request.service";
-import { Heart, Presentation, Rocket, Star } from "lucide-react";
-import { MovieData, MovieDetailsData } from "@/definitions/movie.interface";
+import { Heart, PlayCircle, Presentation, Rocket, Star, X } from "lucide-react";
+import {
+  MovieData,
+  MovieDetailsData,
+  MovieTeaserData,
+} from "@/definitions/movie.interface";
 import axios, { AxiosError } from "axios";
 import { useMovieProvider } from "@/providers/MovieProvider";
 
 export default function MovieDetails({ id }: { id: string }): React.ReactNode {
   const [details, setDetails] = useState<MovieDetailsData | null>(null);
+  const [teasers, setTeasers] = useState<MovieTeaserData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [trailerSrc, setTrailerSrc] = useState<string | null>(null);
 
-  const { favorites, setFavorites } = useMovieProvider();
+  const { favorites, setFavorites, isMobile } = useMovieProvider();
 
   const isFavourite = favorites.some((fav) => fav.id.toString() === id);
 
@@ -46,7 +53,7 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
   const getMovieDetails = async () => {
     try {
       setLoading(true);
-      const result = await axios.get(`/movies/?movie_id=${id}`);
+      const result = await axios.get(`/movie?movie_id=${id}`);
       if (result) {
         setDetails(result.data as MovieDetailsData);
       }
@@ -56,7 +63,31 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
         if (error.response) {
           alert(error.response.data);
         } else {
-          alert(error.message);
+          console.error(error.message);
+        }
+      } else {
+        console.error(err);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMovieTeaser = async () => {
+    try {
+      setLoading(true);
+      const result = await axios.get(`/movie/teaser?movie_id=${id}`);
+      if (result) {
+        const data = result.data as MovieTeaserData[];
+        setTeasers(data);
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const error: AxiosError = err;
+        if (error.response) {
+          alert(error.response.data);
+        } else {
+          console.error(error.message);
         }
       } else {
         console.error(err);
@@ -68,7 +99,15 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
 
   useEffect(() => {
     getMovieDetails();
+    getMovieTeaser();
   }, []);
+
+  useEffect(() => {
+    const src = teasers.find((teaser) => teaser.type === "Trailer")?.key;
+    if (src) {
+      setTrailerSrc(src);
+    }
+  }, [teasers]);
 
   if (loading || !details) {
     return (
@@ -88,15 +127,29 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
   }
 
   return (
-    <div className="px-4 py-5">
-      <div className="flex items-center lg:flex-row flex-col gap-8 max-w-7xl mx-auto">
-        <Image
-          src={`${TMDB_Endpoints.img_url}${details?.poster_path}`}
-          alt={details?.title ?? "Movie title"}
-          width={500}
-          height={100}
-          className="max-w-[500px] w-full h-auto object-cover rounded-lg"
-        />
+    <div className="relative px-4 py-5">
+      <div className="flex items-center lg:flex-row flex-col gap-8 max-w-7xl mx-auto relative z-0">
+        <div className="flex justify-center w-full min-h-[350px] max-w-[500px] relative group/image rounded-lg overflow-hidden">
+          <Image
+            src={`${TMDB_Endpoints.img_url}${details?.poster_path}`}
+            alt={details?.title ?? "Movie title"}
+            width={500}
+            height={100}
+            placeholder="blur"
+            blurDataURL={`${TMDB_Endpoints.img_url}${details?.poster_path}`}
+            className="max-w-[500px] w-full h-auto object-cover rounded-lg relative"
+          />
+          <div
+            className={`items-center justify-center absolute z-[1] inset-0 bg-black/50 group-hover/image:flex animate-fadeInZoomFast ${
+              isMobile ? "flex" : "hidden"
+            }`}
+          >
+            <PlayCircle
+              className="size-20 text-red-base cursor-pointer"
+              onClick={() => setOpen(true)}
+            />
+          </div>
+        </div>
         <div className="space-y-3 py-4 w-full max-w-[500px] lg:max-w-full">
           <div className="flex justify-end">
             <button
@@ -175,6 +228,28 @@ export default function MovieDetails({ id }: { id: string }): React.ReactNode {
           </div>
         </div>
       </div>
+
+      {open && trailerSrc && (
+        <div className="fixed z-20 top-20 inset-0 bg-white/50">
+          <X
+            className="text-red-base size-12 p-2 cursor-pointer mt-4 ml-auto mr-10 bg-white border rounded-full hover:shadow-md"
+            onClick={() => setOpen(false)}
+          />
+          <div className="rounded-lg mt-5 sm:mt-0">
+            <iframe
+              width="560"
+              height="315"
+              src={`https://www.youtube.com/embed/${trailerSrc}`}
+              title="YouTube video player"
+              className="w-4/5 max-w-full h-[50vh] sm:h-[70vh] max-h-full mx-auto rounded-xl"
+              // frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              // referrerpolicy="strict-origin-when-cross-origin"
+              // allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

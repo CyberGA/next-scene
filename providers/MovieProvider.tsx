@@ -38,7 +38,7 @@ export default function MovieProvider({
   useEffect(() => {
     getFavourites();
 
-    if (typeof navigator !== "undefined") {
+    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
       setIsMobile(
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
           navigator.userAgent

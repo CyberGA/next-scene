@@ -15,6 +15,19 @@ export interface MovieData {
   vote_count: number;
 }
 
+export interface MovieTeaserData {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+}
+
 export interface MovieDetailsData {
   adult: boolean;
   backdrop_path: string;

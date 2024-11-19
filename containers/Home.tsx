@@ -93,7 +93,7 @@ export default function Home(): React.ReactNode {
 
   if (movies.length === 0) {
     return (
-      <div className="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-w-7xl mx-auto place-items-center gap-4 px-6 py-5">
+      <div className="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-w-screen-2xl mx-auto place-items-center gap-4 px-6 py-5">
         {Array.from({ length: 20 }).map((_, index) => (
           <div
             key={index}
@@ -118,7 +118,7 @@ export default function Home(): React.ReactNode {
           <Search className="size-6 text-red-base" />
         </div>
       </div>
-      <div className="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-w-7xl mx-auto place-items-center gap-4 px-6 py-5">
+      <div className="grid grid-cols-1 min-[460px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 max-w-screen-2xl mx-auto place-items-center gap-4 px-6 py-5">
         {movies.map((movie, index) => (
           <MoviewPreviewCard
             key={index}

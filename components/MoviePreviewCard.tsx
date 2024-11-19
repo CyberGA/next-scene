@@ -70,8 +70,8 @@ const MoviewPreviewCard = forwardRef<HTMLDivElement, { movie: MovieData }>(
           </button>
         </Link>
         <div
-          className={`absolute z-[1] bottom-3 inset-x-2 h-fit max-h-[80%] text-white p-2  bg-black/20 backdrop-blur-xl backdrop-invert rounded-xl translate-y-full ease-in-out group-hover/preview:translate-y-0 duration-300 ${
-            isMobile ? "translate-y-0" : ""
+          className={`absolute z-[1] bottom-3 inset-x-2 h-fit max-h-[80%] text-white p-2  bg-black/20 backdrop-blur-xl backdrop-invert rounded-xl ease-in-out group-hover/preview:translate-y-0 duration-300 ${
+            isMobile ? "translate-y-0" : "translate-y-full"
           }`}
         >
           <p className="text-center max-w-60 font-bold text-white mx-auto">
@@ -93,4 +93,5 @@ const MoviewPreviewCard = forwardRef<HTMLDivElement, { movie: MovieData }>(
     );
   }
 );
+MoviewPreviewCard.displayName = "MoviewPreviewCard";
 export default MoviewPreviewCard;
