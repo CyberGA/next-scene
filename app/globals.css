@@ -5,13 +5,40 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --red-base: #F03437;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+	display: block !important;
+	width: 8px;
+	height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--red-base);
+	border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+	background: none;
+}
+
+*::-webkit-scrollbar-button {
+	/* display: none; */
+  background: none;
 }
 
 body {
